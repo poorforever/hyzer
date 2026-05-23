@@ -9,7 +9,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [https://localhost:3000](https://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
@@ -44,3 +44,37 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Configuration OAuth2
+
+Pour que l'authentification avec les plateformes de musique fonctionne, vous devez configurer les identifiants Client ID dans un fichier `.env` à la racine du projet.
+
+1. Créez un fichier `.env` (si ce n'est pas déjà fait).
+2. Ajoutez vos identifiants :
+   ```env
+   REACT_APP_SPOTIFY_CLIENT_ID=votre_client_id_spotify
+   REACT_APP_YOUTUBE_CLIENT_ID=votre_client_id_youtube
+   REACT_APP_REDIRECT_URI=http://127.0.0.1:3000/profile
+   ```
+
+### URIs de redirection (Redirect URIs)
+
+Dans les consoles de Spotify et Google, vous devez configurer les URIs de redirection pour correspondre à votre environnement.
+
+- **Développement** : `http://127.0.0.1:3000/profile` (Spotify n'accepte plus `localhost` depuis 2025 ; utiliser l'IP de loopback en HTTP est autorisé)
+- **Production** : L'URL de votre application déployée suivie de `/profile` (ex: `https://votre-app.com/profile`)
+
+Assurez-vous que la variable `REACT_APP_REDIRECT_URI` dans votre fichier `.env` correspond exactement à ce qui est configuré dans les consoles.
+
+### YouTube / Google
+- Rendez-vous sur la [Console Google Cloud](https://console.cloud.google.com/).
+- Créez un projet et activez l'API **YouTube Data API v3**.
+- Dans "Identifiants", créez un **ID client OAuth 2.0** de type "Application Web".
+- Ajoutez `http://127.0.0.1:3000/profile` dans les **Origines JavaScript autorisées** et les **URI de redirection autorisés**.
+- Pour le "dev token" (API Key) : Bien que le flux OAuth2 utilise principalement le Client ID, certaines limites de quota peuvent nécessiter une API Key. Vous pouvez en créer une dans la même section "Identifiants".
+
+### Spotify
+- Rendez-vous sur le [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
+- Créez une application.
+- Ajoutez `http://127.0.0.1:3000/profile` dans les **Redirect URIs** de la configuration de votre application.
+- **Note :** Spotify n'accepte plus `localhost` comme redirect URI depuis 2025. L'adresse IP `127.0.0.1` en HTTP simple est explicitement autorisée par Spotify pour le développement local.

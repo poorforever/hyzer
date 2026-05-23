@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Placeholder from './pages/Placeholder';
+import Profile from './pages/Profile';
 import './App.css';
 
 const App: React.FC = () => {
@@ -19,7 +20,7 @@ const App: React.FC = () => {
               <Route path="/" element={<Home />} />
               <Route path="/messages" element={<Placeholder title="Messages" />} />
               <Route path="/analytics" element={<Placeholder title="Analytics" />} />
-              <Route path="/profile" element={<Placeholder title="Profile" />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Placeholder title="Settings" />} />
             </Routes>
           </main>
