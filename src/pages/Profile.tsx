@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { authService, AuthState } from '../services/AuthService/AuthService';
 import { SpotifyProvider, YouTubeProvider, MusicDataService } from '../services/MusicProviderStrategy/MusicProviderStrategy';
 import './Profile.css';
+
+const providers = [new SpotifyProvider(), new YouTubeProvider()];
+const musicDataService = new MusicDataService();
 
 const Profile: React.FC = () => {
   const [platforms, setPlatforms] = useState<AuthState[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [message, setMessage] = useState('');
 
-  const providers = [new SpotifyProvider(), new YouTubeProvider()];
-  const musicDataService = new MusicDataService();
+  const refreshPlatforms = useCallback(() => {
+    const states = providers.map(p => authService.getAuthState(p.name));
+    setPlatforms(states);
+  }, []);
 
   useEffect(() => {
     // Gérer le retour d'OAuth2 (callback)
@@ -18,12 +23,7 @@ const Profile: React.FC = () => {
       setMessage(`Connecté avec succès à ${result.platform} !`);
     }
     refreshPlatforms();
-  }, []);
-
-  const refreshPlatforms = () => {
-    const states = providers.map(p => authService.getAuthState(p.name));
-    setPlatforms(states);
-  };
+  }, [refreshPlatforms]);
 
   const handleLink = (platformName: string) => {
     const provider = providers.find(p => p.name === platformName);
